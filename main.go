@@ -1,12 +1,23 @@
 package main
 
 import (
-	"GoCrud/pkg/db"
+	"GoCrud/api"
 	"fmt"
+	"os"
 )
 
 func main() {
-	db.ConnectDB()
+	if err := run(); err != nil {
+		fmt.Fprintf(os.Stderr, "this is the startup error: %s\n", err)
+		os.Exit(1)
+	}
+}
+func run() error {
+	server := api.NewServer()
 
-	fmt.Println("Hello World!")
+	err := server.Run()
+	if err != nil {
+		return err
+	}
+	return nil
 }
