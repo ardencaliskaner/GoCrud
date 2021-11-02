@@ -4,7 +4,6 @@ import (
 	"GoCrud/pkg/helper"
 	"GoCrud/pkg/model"
 	"GoCrud/pkg/service"
-	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -35,7 +34,7 @@ func (controller *userController) GetById(ctx *gin.Context) {
 
 	if errToken != nil {
 		response := helper.BuildErrorResponse(helper.CheckCredential, errToken.Error(), helper.EmptyObj{})
-		ctx.AbortWithStatusJSON(http.StatusUnauthorized, response)
+		ctx.AbortWithStatusJSON(response.Code, response)
 		return
 	}
 
@@ -43,25 +42,20 @@ func (controller *userController) GetById(ctx *gin.Context) {
 
 	if errParse != nil {
 		response := helper.BuildErrorResponse(helper.BadRequest, errParse.Error(), helper.EmptyObj{})
-		ctx.JSON(http.StatusBadRequest, response)
+		ctx.JSON(response.Code, response)
 		return
 	}
 
 	user, err := controller.userService.GetById(id)
 
 	if err != nil {
-		if err.Error() == helper.UserNotFound {
-			response := helper.BuildErrorResponse(helper.UserNotFound, err.Error(), helper.EmptyObj{})
-			ctx.JSON(http.StatusNotFound, response)
-		} else {
-			response := helper.BuildErrorResponse(helper.ServerError, err.Error(), helper.EmptyObj{})
-			ctx.JSON(http.StatusInternalServerError, response)
-		}
+		response := helper.BuildErrorResponseWithoutMessage(err.Error(), helper.EmptyObj{})
+		ctx.JSON(response.Code, response)
 		return
 	}
 
 	response := helper.BuildResponse(true, helper.Success, user)
-	ctx.JSON(http.StatusOK, response)
+	ctx.JSON(response.Code, response)
 }
 
 func (controller *userController) GetAll(ctx *gin.Context) {
@@ -71,25 +65,19 @@ func (controller *userController) GetAll(ctx *gin.Context) {
 
 	if errToken != nil {
 		response := helper.BuildErrorResponse(helper.CheckCredential, errToken.Error(), helper.EmptyObj{})
-		ctx.AbortWithStatusJSON(http.StatusUnauthorized, response)
+		ctx.AbortWithStatusJSON(response.Code, response)
 		return
 	}
 
 	users, err := controller.userService.GetAll()
 	if err != nil {
-
-		if err.Error() == helper.UserNotFound {
-			response := helper.BuildErrorResponse(helper.UserNotFound, err.Error(), helper.EmptyObj{})
-			ctx.JSON(http.StatusNotFound, response)
-		} else {
-			response := helper.BuildErrorResponse(helper.ServerError, err.Error(), helper.EmptyObj{})
-			ctx.JSON(http.StatusInternalServerError, response)
-		}
+		response := helper.BuildErrorResponseWithoutMessage(err.Error(), helper.EmptyObj{})
+		ctx.JSON(response.Code, response)
 		return
 	}
 
 	response := helper.BuildResponse(true, helper.Success, users)
-	ctx.JSON(http.StatusOK, response)
+	ctx.JSON(response.Code, response)
 }
 
 func (controller *userController) UpdateUser(ctx *gin.Context) {
@@ -99,7 +87,7 @@ func (controller *userController) UpdateUser(ctx *gin.Context) {
 
 	if errToken != nil {
 		response := helper.BuildErrorResponse(helper.CheckCredential, errToken.Error(), helper.EmptyObj{})
-		ctx.AbortWithStatusJSON(http.StatusUnauthorized, response)
+		ctx.AbortWithStatusJSON(response.Code, response)
 		return
 	}
 	var userModel model.User
@@ -107,34 +95,22 @@ func (controller *userController) UpdateUser(ctx *gin.Context) {
 	id, errParse := strconv.Atoi(ctx.Param("id"))
 	errModel := ctx.ShouldBindJSON(&userModel)
 
-	if errModel != nil {
+	if errModel != nil && errParse != nil {
 		response := helper.BuildErrorResponse(helper.BadRequest, errModel.Error(), helper.EmptyObj{})
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, response)
-		return
-	} else if errParse != nil {
-		response := helper.BuildErrorResponse(helper.BadRequest, errParse.Error(), helper.EmptyObj{})
-		ctx.JSON(http.StatusBadRequest, response)
+		ctx.AbortWithStatusJSON(response.Code, response)
 		return
 	}
 
 	updateUserModel, errUpdate := controller.userService.UpdateUser(id, &userModel)
 
 	if errUpdate != nil {
-		if errUpdate.Error() == helper.UserNotFound {
-			response := helper.BuildErrorResponse(helper.UserNotFound, errUpdate.Error(), helper.EmptyObj{})
-			ctx.AbortWithStatusJSON(http.StatusNotFound, response)
-		} else if errUpdate.Error() == helper.UserExist {
-			response := helper.BuildErrorResponse(helper.UserExist, errUpdate.Error(), helper.EmptyObj{})
-			ctx.AbortWithStatusJSON(http.StatusForbidden, response)
-		} else {
-			response := helper.BuildErrorResponse(helper.ServerError, errUpdate.Error(), helper.EmptyObj{})
-			ctx.AbortWithStatusJSON(http.StatusInternalServerError, response)
-		}
+		response := helper.BuildErrorResponseWithoutMessage(errUpdate.Error(), helper.EmptyObj{})
+		ctx.AbortWithStatusJSON(response.Code, response)
 		return
 	}
 
 	response := helper.BuildResponse(true, helper.Success, updateUserModel)
-	ctx.JSON(http.StatusOK, response)
+	ctx.JSON(response.Code, response)
 }
 
 func (controller *userController) DeleteUser(ctx *gin.Context) {
@@ -144,7 +120,7 @@ func (controller *userController) DeleteUser(ctx *gin.Context) {
 
 	if errToken != nil {
 		response := helper.BuildErrorResponse(helper.CheckCredential, errToken.Error(), helper.EmptyObj{})
-		ctx.AbortWithStatusJSON(http.StatusUnauthorized, response)
+		ctx.AbortWithStatusJSON(response.Code, response)
 		return
 	}
 
@@ -152,18 +128,18 @@ func (controller *userController) DeleteUser(ctx *gin.Context) {
 
 	if errParse != nil {
 		response := helper.BuildErrorResponse(helper.BadRequest, errParse.Error(), helper.EmptyObj{})
-		ctx.JSON(http.StatusBadRequest, response)
+		ctx.JSON(response.Code, response)
 		return
 	}
 
 	errDelete := controller.userService.DeleteUser(id)
 
 	if errDelete != nil {
-		response := helper.BuildErrorResponse(helper.ServerError, errDelete.Error(), helper.EmptyObj{})
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, response)
+		response := helper.BuildErrorResponseWithoutMessage(errDelete.Error(), helper.EmptyObj{})
+		ctx.AbortWithStatusJSON(response.Code, response)
 		return
 	}
 
 	response := helper.BuildResponse(true, helper.Success, nil)
-	ctx.JSON(http.StatusOK, response)
+	ctx.JSON(response.Code, response)
 }

@@ -133,8 +133,8 @@ func (service *userService) UpdateUser(id int, userModel *model.User) (model.Use
 
 	existingUser, _ := service.userRepository.GetByEmail(userModel.Email)
 
-	if existingUser.Email == userModel.Email {
-		return model.User{}, errors.New(helper.UserExist)
+	if existingUser.Email == userModel.Email && existingUser.ID != uint(id) {
+		return model.User{}, errors.New(helper.IdMatchedAnotherEmail)
 	}
 
 	userEntity.Name = userModel.Name
@@ -144,6 +144,7 @@ func (service *userService) UpdateUser(id int, userModel *model.User) (model.Use
 	errUpdate := service.userRepository.UpdateUser(userEntity)
 
 	userModel.Id = int(userEntity.ID)
+	userModel.Password = userEntity.Password
 
 	return *userModel, errUpdate
 }

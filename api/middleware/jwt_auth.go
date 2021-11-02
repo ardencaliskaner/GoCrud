@@ -4,7 +4,6 @@ import (
 	"GoCrud/pkg/helper"
 	"GoCrud/pkg/service"
 	"log"
-	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -25,14 +24,14 @@ func (mdw *JwtMiddleware) AuthorizeJWT() gin.HandlerFunc {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
 			response := helper.BuildErrorResponse(helper.TokenNotFound, helper.TokenNotFound, nil)
-			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+			c.AbortWithStatusJSON(response.Code, response)
 			return
 		}
 		token, err := mdw.jwtService.ValidateToken(authHeader)
 
 		if err != nil {
 			response := helper.BuildErrorResponse(helper.ServerError, err.Error(), nil)
-			c.AbortWithStatusJSON(http.StatusInternalServerError, response)
+			c.AbortWithStatusJSON(response.Code, response)
 			return
 		}
 
@@ -42,7 +41,7 @@ func (mdw *JwtMiddleware) AuthorizeJWT() gin.HandlerFunc {
 			log.Println("Claim[issuer] :", claims["issuer"])
 		} else {
 			response := helper.BuildErrorResponse(helper.TokenNotValid, err.Error(), nil)
-			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
+			c.AbortWithStatusJSON(response.Code, response)
 		}
 	}
 }

@@ -32,7 +32,7 @@ func (repo *userRepository) GetById(id int) (*entity.User, error) {
 	var user entity.User
 	res := repo.DB.Where("id = ?", id).Take(&user)
 	if res.Error != nil {
-		return &entity.User{}, res.Error
+		return &entity.User{}, errors.New(helper.UserNotFound)
 	}
 	return &user, nil
 }

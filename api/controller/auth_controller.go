@@ -4,7 +4,6 @@ import (
 	"GoCrud/pkg/helper"
 	"GoCrud/pkg/model"
 	"GoCrud/pkg/service"
-	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -34,20 +33,20 @@ func (controller *authController) Login(ctx *gin.Context) {
 	errDTO := ctx.ShouldBind(&loginModel)
 	if errDTO != nil {
 		response := helper.BuildErrorResponse(helper.BadRequest, errDTO.Error(), helper.EmptyObj{})
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, response)
+		ctx.AbortWithStatusJSON(response.Code, response)
 		return
 	}
 	userModel, verifyErr := controller.authService.VerifyCredential(loginModel.Email, loginModel.Password)
 
 	if verifyErr != nil {
-		response := helper.BuildErrorResponse(helper.CheckCredential, verifyErr.Error(), helper.EmptyObj{})
-		ctx.AbortWithStatusJSON(http.StatusUnauthorized, response)
+		response := helper.BuildErrorResponseWithoutMessage(verifyErr.Error(), helper.EmptyObj{})
+		ctx.AbortWithStatusJSON(response.Code, response)
 		return
 	}
 
 	generatedToken := controller.jwtService.GenerateToken(strconv.FormatUint(uint64(userModel.Id), 10))
 	response := helper.BuildResponse(true, helper.Success, generatedToken)
-	ctx.JSON(http.StatusOK, response)
+	ctx.JSON(response.Code, response)
 }
 
 func (controller *authController) Register(ctx *gin.Context) {
@@ -57,24 +56,19 @@ func (controller *authController) Register(ctx *gin.Context) {
 
 	if errModel != nil {
 		response := helper.BuildErrorResponse(helper.BadRequest, errModel.Error(), helper.EmptyObj{})
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, response)
+		ctx.AbortWithStatusJSON(response.Code, response)
 		return
 	}
 
 	userModel, createuserErr := controller.userService.CreateUser(registerModel)
 
 	if createuserErr != nil {
-		if createuserErr.Error() == helper.UserExist {
-			response := helper.BuildErrorResponse(helper.UserExist, createuserErr.Error(), helper.EmptyObj{})
-			ctx.AbortWithStatusJSON(http.StatusForbidden, response)
-		} else {
-			response := helper.BuildErrorResponse(helper.ServerError, createuserErr.Error(), helper.EmptyObj{})
-			ctx.AbortWithStatusJSON(http.StatusInternalServerError, response)
-		}
+		response := helper.BuildErrorResponseWithoutMessage(createuserErr.Error(), helper.EmptyObj{})
+		ctx.AbortWithStatusJSON(response.Code, response)
 		return
 	}
 
 	generatedToken := controller.jwtService.GenerateToken(strconv.FormatUint(uint64(userModel.Id), 10))
 	response := helper.BuildResponse(true, helper.Success, generatedToken)
-	ctx.JSON(http.StatusOK, response)
+	ctx.JSON(response.Code, response)
 }
