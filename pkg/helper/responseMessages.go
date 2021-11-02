@@ -19,9 +19,3 @@ const (
 
 	Success string = "succes"
 )
-
-var statusText = map[int]string{}
-
-func StatusText(code int) string {
-	return statusText[code]
-}

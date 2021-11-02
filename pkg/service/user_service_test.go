@@ -32,7 +32,7 @@ func TestValidate(t *testing.T) {
 
 	t.Run("Success", func(t *testing.T) {
 
-		user := model.User{ID: 1, Name: "Arden", Email: "arden@mail.com"}
+		user := model.User{Id: 1, Name: "Arden", Email: "arden@mail.com"}
 		err := userService.Validate(&user)
 
 		assert.NoError(t, err)
@@ -47,7 +47,7 @@ func TestValidate(t *testing.T) {
 	})
 	t.Run("Error Empty User Name", func(t *testing.T) {
 
-		user := model.User{ID: 1, Name: "", Email: "arden@mail.com"}
+		user := model.User{Id: 1, Name: "", Email: "arden@mail.com"}
 		err := userService.Validate(&user)
 
 		assert.NotNil(t, err)

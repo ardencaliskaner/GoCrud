@@ -27,6 +27,20 @@ func (_m *UserRepository) CreateUser(user *entity.User) error {
 	return r0
 }
 
+// DeleteUser provides a mock function with given fields: delUserEntity
+func (_m *UserRepository) DeleteUser(delUserEntity *entity.User) error {
+	ret := _m.Called(delUserEntity)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(*entity.User) error); ok {
+		r0 = rf(delUserEntity)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // GetAll provides a mock function with given fields:
 func (_m *UserRepository) GetAll() ([]*entity.User, error) {
 	ret := _m.Called()

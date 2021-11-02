@@ -1,6 +1,9 @@
 package helper
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 type Response struct {
 	Status  bool        `json:"status"`
@@ -26,6 +29,9 @@ func BuildResponse(status bool, message string, data interface{}) Response {
 //BuildErrorResponse method is to inject data value to dynamic failed response
 func BuildErrorResponse(message string, err string, data interface{}) Response {
 	splittedError := strings.Split(err, "\n")
+
+	findErrorEnum(splittedError[0])
+
 	res := Response{
 		Status:  false,
 		Message: message,
@@ -34,3 +40,28 @@ func BuildErrorResponse(message string, err string, data interface{}) Response {
 	}
 	return res
 }
+
+func findErrorEnum(message string) {
+	test := StatusMap(message)
+	fmt.Println(test)
+}
+
+const (
+	RecordNotFound = "record not found"
+)
+
+var statusMap = map[string]int{
+	RecordNotFound: 403,
+}
+
+func StatusMap(code string) int {
+	return statusMap[code]
+}
+
+// var statusText = map[string]int{
+// 	RecordNotFound: 403,
+// }
+
+// func StatusText(code string) int {
+// 	return statusText[code]
+// }

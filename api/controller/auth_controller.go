@@ -17,12 +17,14 @@ type AuthController interface {
 
 type authController struct {
 	authService service.AuthService
+	userService service.UserService
 	jwtService  service.JWTService
 }
 
 func NewAuthController() AuthController {
 	return &authController{
 		authService: service.NewAuthService(),
+		userService: service.NewUserService(),
 		jwtService:  service.NewJWTService(),
 	}
 }
@@ -43,7 +45,7 @@ func (controller *authController) Login(ctx *gin.Context) {
 		return
 	}
 
-	generatedToken := controller.jwtService.GenerateToken(strconv.FormatUint(uint64(userModel.ID), 10))
+	generatedToken := controller.jwtService.GenerateToken(strconv.FormatUint(uint64(userModel.Id), 10))
 	response := helper.BuildResponse(true, helper.Success, generatedToken)
 	ctx.JSON(http.StatusOK, response)
 }
@@ -59,7 +61,7 @@ func (controller *authController) Register(ctx *gin.Context) {
 		return
 	}
 
-	userModel, createuserErr := controller.authService.CreateUser(registerModel)
+	userModel, createuserErr := controller.userService.CreateUser(registerModel)
 
 	if createuserErr != nil {
 		if createuserErr.Error() == helper.UserExist {
@@ -72,7 +74,7 @@ func (controller *authController) Register(ctx *gin.Context) {
 		return
 	}
 
-	generatedToken := controller.jwtService.GenerateToken(strconv.FormatUint(uint64(userModel.ID), 10))
+	generatedToken := controller.jwtService.GenerateToken(strconv.FormatUint(uint64(userModel.Id), 10))
 	response := helper.BuildResponse(true, helper.Success, generatedToken)
 	ctx.JSON(http.StatusOK, response)
 }

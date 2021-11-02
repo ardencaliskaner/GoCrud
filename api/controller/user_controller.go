@@ -123,6 +123,9 @@ func (controller *userController) UpdateUser(ctx *gin.Context) {
 		if errUpdate.Error() == helper.UserNotFound {
 			response := helper.BuildErrorResponse(helper.UserNotFound, errUpdate.Error(), helper.EmptyObj{})
 			ctx.AbortWithStatusJSON(http.StatusNotFound, response)
+		} else if errUpdate.Error() == helper.UserExist {
+			response := helper.BuildErrorResponse(helper.UserExist, errUpdate.Error(), helper.EmptyObj{})
+			ctx.AbortWithStatusJSON(http.StatusForbidden, response)
 		} else {
 			response := helper.BuildErrorResponse(helper.ServerError, errUpdate.Error(), helper.EmptyObj{})
 			ctx.AbortWithStatusJSON(http.StatusInternalServerError, response)
@@ -135,6 +138,32 @@ func (controller *userController) UpdateUser(ctx *gin.Context) {
 }
 
 func (controller *userController) DeleteUser(ctx *gin.Context) {
-	response := helper.BuildErrorResponse(helper.ServerError, helper.ServerError, helper.EmptyObj{})
-	ctx.AbortWithStatusJSON(http.StatusInternalServerError, response)
+
+	authHeader := ctx.GetHeader("Authorization")
+	_, errToken := controller.jwtService.ValidateToken(authHeader)
+
+	if errToken != nil {
+		response := helper.BuildErrorResponse(helper.CheckCredential, errToken.Error(), helper.EmptyObj{})
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, response)
+		return
+	}
+
+	id, errParse := strconv.Atoi(ctx.Param("id"))
+
+	if errParse != nil {
+		response := helper.BuildErrorResponse(helper.BadRequest, errParse.Error(), helper.EmptyObj{})
+		ctx.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	errDelete := controller.userService.DeleteUser(id)
+
+	if errDelete != nil {
+		response := helper.BuildErrorResponse(helper.ServerError, errDelete.Error(), helper.EmptyObj{})
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, response)
+		return
+	}
+
+	response := helper.BuildResponse(true, helper.Success, nil)
+	ctx.JSON(http.StatusOK, response)
 }
