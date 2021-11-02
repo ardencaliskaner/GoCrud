@@ -51,11 +51,9 @@ func (service *authService) CreateUser(registerModel model.Register) (model.User
 		return model.User{}, errors.New(helper.BadRequest)
 	}
 
-	existingUser, existErr := service.userRepository.GetByEmail(registerModel.Email)
+	existingUser, _ := service.userRepository.GetByEmail(registerModel.Email)
 
-	if existErr != nil {
-		return model.User{}, existErr
-	} else if existingUser.Email == registerModel.Email {
+	if existingUser.Email == registerModel.Email {
 		return model.User{}, errors.New(helper.UserExist)
 	}
 

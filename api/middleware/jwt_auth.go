@@ -25,7 +25,7 @@ func (mdw *JwtMiddleware) AuthorizeJWT() gin.HandlerFunc {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
 			response := helper.BuildErrorResponse(helper.TokenNotFound, helper.TokenNotFound, nil)
-			c.AbortWithStatusJSON(http.StatusBadRequest, response)
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response)
 			return
 		}
 		token, err := mdw.jwtService.ValidateToken(authHeader)

@@ -38,13 +38,13 @@ func (controller *authController) Login(ctx *gin.Context) {
 	userModel, verifyErr := controller.authService.VerifyCredential(loginModel.Email, loginModel.Password)
 
 	if verifyErr != nil {
-		response := helper.BuildErrorResponse(helper.CheckCredential, helper.InvalidCredential, helper.EmptyObj{})
+		response := helper.BuildErrorResponse(helper.CheckCredential, verifyErr.Error(), helper.EmptyObj{})
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, response)
 		return
 	}
 
 	generatedToken := controller.jwtService.GenerateToken(strconv.FormatUint(uint64(userModel.ID), 10))
-	response := helper.BuildResponse(true, "OK!", generatedToken)
+	response := helper.BuildResponse(true, helper.Success, generatedToken)
 	ctx.JSON(http.StatusOK, response)
 }
 
@@ -73,7 +73,6 @@ func (controller *authController) Register(ctx *gin.Context) {
 	}
 
 	generatedToken := controller.jwtService.GenerateToken(strconv.FormatUint(uint64(userModel.ID), 10))
-	response := helper.BuildResponse(true, "OK!", generatedToken)
+	response := helper.BuildResponse(true, helper.Success, generatedToken)
 	ctx.JSON(http.StatusOK, response)
-
 }

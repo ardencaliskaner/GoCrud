@@ -19,7 +19,9 @@ type userRepository struct {
 type UserRepository interface {
 	GetById(id int) (*entity.User, error)
 	GetByEmail(email string) (*entity.User, error)
+	GetAll() (users []*entity.User, err error)
 	CreateUser(user *entity.User) error
+	UpdateUser(updateUserEntity *entity.User) error
 }
 
 func NewUserRepository() UserRepository {
@@ -44,11 +46,31 @@ func (repo *userRepository) GetByEmail(email string) (*entity.User, error) {
 	return &user, nil
 }
 
+func (repo *userRepository) GetAll() (users []*entity.User, err error) {
+	err = repo.DB.Find(&users).Error
+
+	if err != nil {
+		return nil, err
+	} else if len(users) == 0 {
+		return nil, errors.New(helper.UserNotFound)
+	}
+
+	return users, err
+}
+
 func (repo *userRepository) CreateUser(user *entity.User) error {
 	user.Password = hashAndSalt([]byte(user.Password))
 
 	result := repo.DB.Create(&user)
 
+	return result.Error
+}
+
+func (repo *userRepository) UpdateUser(updateUserEntity *entity.User) error {
+
+	updateUserEntity.Password = hashAndSalt([]byte(updateUserEntity.Password))
+
+	result := repo.DB.Save(&updateUserEntity)
 	return result.Error
 }
 
