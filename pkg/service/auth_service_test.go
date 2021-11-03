@@ -11,10 +11,9 @@ import (
 )
 
 func TestVerifyCredential(t *testing.T) {
-	mockUserRepository := new(mocks.UserRepository)
-	authService := service.NewAuthServiceMock(mockUserRepository)
-
 	t.Run("Success", func(t *testing.T) {
+		mockUserRepository := new(mocks.UserRepository)
+		authService := service.NewAuthServiceMock(mockUserRepository)
 
 		password := "1324"
 		hash, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
@@ -31,6 +30,8 @@ func TestVerifyCredential(t *testing.T) {
 		assert.NoError(t, err)
 	})
 	t.Run("Error", func(t *testing.T) {
+		mockUserRepository := new(mocks.UserRepository)
+		authService := service.NewAuthServiceMock(mockUserRepository)
 
 		password := "1324444"
 
