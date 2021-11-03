@@ -23,10 +23,13 @@
 - body:  { "Name": "Arden", "Email": "arden@mail.com", "Password": "strongpassword123" }
 - returns auth token of inserted user
 ```sh
-curl -X PUT \
--d '{"Name": "Arden", "Email": "arden@mail.com", "Password": "strongpassword123"}'\
--H 'Content-Type: application/json' \
-http://localhost:8080/v1/api/users
+curl --location --request PUT 'http://localhost:8080/v1/api/users' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+	"Name":"Arden",
+    "Email":"arden@mail.com",
+    "Password":"strongpassword123"
+}'
 ```
 
 ##### #Login (Authorize) With Given User Credentials
@@ -34,28 +37,28 @@ http://localhost:8080/v1/api/users
 - body:  { "Email": "arden@mail.com", "Password": "strongpassword123" }
 - returns auth token of loggedin user
 ```sh
-curl -X PUT \
--d '{ "Email": "arden@mail.com", "Password": "strongpassword123" }'\
--H 'Content-Type: application/json' \
-http://localhost:8080/v1/api/auth/login
+curl --location --request POST 'http://localhost:8080/v1/api/auth/login' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+	"Email":"arden@mail.com",
+    "Password":"strongpassword123"
+}'
 ```
 
 ##### #GetUserById - (Authorization Required)
 - GET http://localhost:8080/v1/api/users/1 
 - headers : { "Authorization": "AUTHTOKEN"}
 ```sh
-curl -X GET \
--H 'Authorization: AUTHTOKEN' \
-http://localhost:8080/users/1
+curl --location --request GET 'http://localhost:8080/v1/api/users/1' \
+--header 'Authorization: AUTHTOKEN'
 ```
 
 ##### # GetAllUsers - (Authorization Required)
 - GET http://localhost:8080/v1/api/users
 - headers : { "Authorization": "AUTHTOKEN"}
 ```sh
-curl -X GET \
--H 'Authorization: AUTHTOKEN' \
-http://localhost:8080/users
+curl --location --request GET 'http://localhost:8080/v1/api/users' \
+--header 'Authorization: AUTHTOKEN'
 ```
 
 ##### # UpdateUser Credentials With Given Id Of User - (Authorization Required)
@@ -63,19 +66,22 @@ http://localhost:8080/users
 - headers : { "Authorization": "AUTHTOKEN"}
 - body:  { "Name": "ArdenNew", "Email": "arden_new@mail.com", "Password": "strongpassword1234" }
 ```sh
-curl -X PATCH \
--d '{ "Name": "ArdenNew", "Email": "arden_new@mail.com", "Password": "strongpassword1234" }'\ 
--H 'Content-Type: application/json' \
--H 'Authorization: AUTHTOKEN' \
-http://localhost:8080/v1/api/users/1
+curl --location --request PATCH 'http://localhost:8080/v1/api/users/1' \
+--header 'Authorization: AUTHTOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+	"Name":"ArdenNew",
+	"Email":"arden_new@mail.com",
+    "Password":"strongpassword1234"
+}'
 ```
 
 ##### # DeleteUser (Set DeletedDate) With Id Of User - (Authorization Required)
 - DELETE http://localhost:8080/v1/api/users/1
 - headers : { "Authorization": "AUTHTOKEN"}
 ```sh
-curl -X DELETE \
-http://localhost:8080/v1/api/users/1
+curl --location --request DELETE 'http://localhost:8080/v1/api/users/1' \
+--header 'Authorization: AUTHTOKEN'
 ```
 
 >  Note: Response model showen on below
