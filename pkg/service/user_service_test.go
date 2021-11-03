@@ -106,15 +106,15 @@ func TestUpdateUser(t *testing.T) {
 		mockUserRepository := new(mocks.UserRepository)
 		userService := service.NewUserServiceMock(mockUserRepository)
 
-		userModel := model.User{Id: 0, Name: "Arden", Email: "arden@test.com", Password: "1234"}
+		userModel := model.Update{Name: "Arden", Email: "arden@test.com", Password: "1234"}
 		mockUser := entity.User{Name: "Arden", Email: "arden@test.com", Password: "1234"}
 
-		mockUserRepository.On("GetById", userModel.Id).Return(&mockUser, nil)
+		mockUserRepository.On("GetById", 0).Return(&mockUser, nil)
 		mockUserRepository.On("GetByEmail", userModel.Email).Return(&mockUser, nil)
 
 		mockUserRepository.On("UpdateUser", &mockUser).Return(nil)
 
-		updatedUser, err := userService.UpdateUser(userModel.Id, &userModel)
+		updatedUser, err := userService.UpdateUser(0, &userModel)
 
 		assert.Equal(t, updatedUser.Email, mockUser.Email)
 
@@ -124,15 +124,15 @@ func TestUpdateUser(t *testing.T) {
 		mockUserRepository := new(mocks.UserRepository)
 		userService := service.NewUserServiceMock(mockUserRepository)
 
-		userModel := model.User{Id: 1, Name: "Arden", Email: "arden@test.com", Password: "1234"}
+		userModel := model.Update{Name: "Arden", Email: "arden@test.com", Password: "1234"}
 		// mockUser := entity.User{Name: "Arden", Email: "arden@test.com", Password: "1234"}
 
-		mockUserRepository.On("GetById", userModel.Id).Return(&entity.User{}, nil)
+		mockUserRepository.On("GetById", 1).Return(&entity.User{}, nil)
 
 		// mockUserRepository.On("GetByEmail", userModel.Email).Return(&entity.User{}, nil)
 		// mockUserRepository.On("UpdateUser", &mockUser).Return(nil)
 
-		_, err := userService.UpdateUser(userModel.Id, &userModel)
+		_, err := userService.UpdateUser(1, &userModel)
 
 		assert.NotNil(t, err)
 		assert.EqualError(t, err, helper.UserNotFound)
@@ -141,15 +141,15 @@ func TestUpdateUser(t *testing.T) {
 		mockUserRepository := new(mocks.UserRepository)
 		userService := service.NewUserServiceMock(mockUserRepository)
 
-		userModel := model.User{Id: 1, Name: "Arden", Email: "arden@test.com", Password: "1234"}
+		userModel := model.Update{Name: "Arden", Email: "arden@test.com", Password: "1234"}
 		mockUser := entity.User{Name: "Arden", Email: "arden@test.com", Password: "1234"}
 
-		mockUserRepository.On("GetById", userModel.Id).Return(&mockUser, nil)
+		mockUserRepository.On("GetById", 1).Return(&mockUser, nil)
 		mockUserRepository.On("GetByEmail", userModel.Email).Return(&mockUser, nil)
 
 		mockUserRepository.On("UpdateUser", &mockUser).Return(nil)
 
-		_, err := userService.UpdateUser(userModel.Id, &userModel)
+		_, err := userService.UpdateUser(1, &userModel)
 
 		assert.NotNil(t, err)
 		assert.EqualError(t, err, helper.IdMatchedAnotherEmail)
@@ -158,8 +158,8 @@ func TestUpdateUser(t *testing.T) {
 		mockUserRepository := new(mocks.UserRepository)
 		userService := service.NewUserServiceMock(mockUserRepository)
 
-		userModel := model.User{Id: 0, Name: "Arden", Email: "", Password: "1234"}
-		_, err := userService.UpdateUser(userModel.Id, &userModel)
+		userModel := model.Update{Name: "Arden", Email: "", Password: "1234"}
+		_, err := userService.UpdateUser(0, &userModel)
 
 		assert.NotNil(t, err)
 		assert.EqualError(t, err, helper.UserEmailEmpty)
@@ -168,8 +168,8 @@ func TestUpdateUser(t *testing.T) {
 		mockUserRepository := new(mocks.UserRepository)
 		userService := service.NewUserServiceMock(mockUserRepository)
 
-		userModel := model.User{Id: 0, Name: "", Email: "arden@mail.com", Password: "1234"}
-		_, err := userService.UpdateUser(userModel.Id, &userModel)
+		userModel := model.Update{Name: "", Email: "arden@mail.com", Password: "1234"}
+		_, err := userService.UpdateUser(0, &userModel)
 
 		assert.NotNil(t, err)
 		assert.EqualError(t, err, helper.UserNameEmpty)
@@ -178,8 +178,8 @@ func TestUpdateUser(t *testing.T) {
 		mockUserRepository := new(mocks.UserRepository)
 		userService := service.NewUserServiceMock(mockUserRepository)
 
-		userModel := model.User{Id: 0, Name: "Arden", Email: "arden@mail.com", Password: ""}
-		_, err := userService.UpdateUser(userModel.Id, &userModel)
+		userModel := model.Update{Name: "Arden", Email: "arden@mail.com", Password: ""}
+		_, err := userService.UpdateUser(0, &userModel)
 
 		assert.NotNil(t, err)
 		assert.EqualError(t, err, helper.UserPassEmpty)

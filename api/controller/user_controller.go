@@ -36,6 +36,9 @@ func NewUserController() *userController {
 // @Produce json
 // @Param   id    path    int     true        "ID"
 // @Success 200 {object} helper.Response{status=bool,message=string,errors=object,data=object}
+// @Failure 400 {object} helper.Response{status=bool,message=string,errors=object,data=object} "bad request"
+// @Failure 401 {object} helper.Response{status=bool,message=string,errors=object,data=object} "unauthorized please check again your credential"
+// @Failure 404 {object} helper.Response{status=bool,message=string,errors=object,data=object} "user with that id does not exist"
 // @Router /v1/api/users/{id} [get]
 // @Security bearerAuth
 func (controller *userController) GetById(ctx *gin.Context) {
@@ -75,6 +78,8 @@ func (controller *userController) GetById(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {object} helper.Response{status=bool,message=string,errors=object,data=object}
+// @Failure 401 {object} helper.Response{status=bool,message=string,errors=object,data=object} "unauthorized please check again your credential"
+// @Failure 404 {object} helper.Response{status=bool,message=string,errors=object,data=object} "user with that id does not exist"
 // @Router /v1/api/users [get]
 // @Security bearerAuth
 func (controller *userController) GetAll(ctx *gin.Context) {
@@ -106,8 +111,11 @@ func (controller *userController) GetAll(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param   id    path    int     true        "ID"
-// @Param login body model.User true "User model"
+// @Param update body model.Update true "User Update Model"
 // @Success 200 {object} helper.Response{status=bool,message=string,errors=object,data=object}
+// @Failure 400 {object} helper.Response{status=bool,message=string,errors=object,data=object} "bad request || user with that email already exists, please check id or use another email"
+// @Failure 401 {object} helper.Response{status=bool,message=string,errors=object,data=object} "unauthorized please check again your credential"
+// @Failure 404 {object} helper.Response{status=bool,message=string,errors=object,data=object} "user with that id does not exist"
 // @Router /v1/api/users/{id} [PATCH]
 // @Security bearerAuth
 func (controller *userController) UpdateUser(ctx *gin.Context) {
@@ -120,7 +128,7 @@ func (controller *userController) UpdateUser(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(response.Code, response)
 		return
 	}
-	var userModel model.User
+	var userModel model.Update
 
 	id, errParse := strconv.Atoi(ctx.Param("id"))
 	errModel := ctx.ShouldBindJSON(&userModel)
@@ -151,6 +159,9 @@ func (controller *userController) UpdateUser(ctx *gin.Context) {
 // @Produce json
 // @Param   id    path    int     true        "ID"
 // @Success 200 {object} helper.Response{status=bool,message=string,errors=object,data=object}
+// @Failure 400 {object} helper.Response{status=bool,message=string,errors=object,data=object} "bad request"
+// @Failure 401 {object} helper.Response{status=bool,message=string,errors=object,data=object} "unauthorized please check again your credential"
+// @Failure 404 {object} helper.Response{status=bool,message=string,errors=object,data=object} "user with that id does not exist"
 // @Router /v1/api/users/{id} [DELETE]
 // @Security bearerAuth
 func (controller *userController) DeleteUser(ctx *gin.Context) {

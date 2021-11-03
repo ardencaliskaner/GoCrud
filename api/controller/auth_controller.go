@@ -34,8 +34,11 @@ func NewAuthController() AuthController {
 // @Tags Login
 // @Accept json
 // @Produce json
-// @Param login body model.Login true "Login model"
+// @Param login body model.Login true "User Login Model"
 // @Success 200 {object} helper.Response{status=bool,message=string,errors=object,data=object}
+// @Failure 400 {object} helper.Response{status=bool,message=string,errors=object,data=object} "bad request"
+// @Failure 401 {object} helper.Response{status=bool,message=string,errors=object,data=object} "unauthorized please check again your credential || email or password not match"
+// @Failure 404 {object} helper.Response{status=bool,message=string,errors=object,data=object} "user with that id does not exist"
 // @Router /v1/api/auth/login [POST]
 func (controller *authController) Login(ctx *gin.Context) {
 	var loginModel model.Login
@@ -64,8 +67,12 @@ func (controller *authController) Login(ctx *gin.Context) {
 // @Tags Register (Insert)
 // @Accept json
 // @Produce json
-// @Param login body model.Register true "Register model"
+// @Param register body model.Register true "User Register Model"
 // @Success 200 {object} helper.Response{status=bool,message=string,errors=object,data=object}
+// @Failure 400 {object} helper.Response{status=bool,message=string,errors=object,data=object} "bad request || user with that email already exists, please check id or use another email"
+// @Failure 401 {object} helper.Response{status=bool,message=string,errors=object,data=object} "unauthorized please check again your credential || email or password not match"
+// @Failure 403 {object} helper.Response{status=bool,message=string,errors=object,data=object} "user with that email already exists"
+// @Failure 404 {object} helper.Response{status=bool,message=string,errors=object,data=object} "user with that id does not exist"
 // @Router /v1/api/users [PUT]
 func (controller *authController) Register(ctx *gin.Context) {
 	var registerModel model.Register

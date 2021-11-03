@@ -33,12 +33,10 @@ definitions:
     - Name
     - Password
     type: object
-  model.User:
+  model.Update:
     properties:
       Email:
         type: string
-      Id:
-        type: integer
       Name:
         type: string
       Password:
@@ -57,7 +55,7 @@ paths:
       - application/json
       description: Create a new token.
       parameters:
-      - description: Login model
+      - description: User Login Model
         in: body
         name: login
         required: true
@@ -68,6 +66,52 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+        "400":
+          description: bad request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+        "401":
+          description: unauthorized please check again your credential || email or
+            password not match
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+        "404":
+          description: user with that id does not exist
           schema:
             allOf:
             - $ref: '#/definitions/helper.Response'
@@ -107,6 +151,36 @@ paths:
                 status:
                   type: boolean
               type: object
+        "401":
+          description: unauthorized please check again your credential
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+        "404":
+          description: user with that id does not exist
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
       security:
       - bearerAuth: []
       summary: List of Users
@@ -117,9 +191,9 @@ paths:
       - application/json
       description: RegisterUser (Insert)
       parameters:
-      - description: Register model
+      - description: User Register Model
         in: body
-        name: login
+        name: register
         required: true
         schema:
           $ref: '#/definitions/model.Register'
@@ -128,6 +202,68 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+        "400":
+          description: bad request || user with that email already exists, please
+            check id or use another email
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+        "401":
+          description: unauthorized please check again your credential || email or
+            password not match
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+        "403":
+          description: user with that email already exists
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+        "404":
+          description: user with that id does not exist
           schema:
             allOf:
             - $ref: '#/definitions/helper.Response'
@@ -160,6 +296,51 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+        "400":
+          description: bad request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+        "401":
+          description: unauthorized please check again your credential
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+        "404":
+          description: user with that id does not exist
           schema:
             allOf:
             - $ref: '#/definitions/helper.Response'
@@ -206,6 +387,51 @@ paths:
                 status:
                   type: boolean
               type: object
+        "400":
+          description: bad request
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+        "401":
+          description: unauthorized please check again your credential
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+        "404":
+          description: user with that id does not exist
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
       security:
       - bearerAuth: []
       summary: Get User With Given Id
@@ -221,17 +447,63 @@ paths:
         name: id
         required: true
         type: integer
-      - description: User model
+      - description: User Update Model
         in: body
-        name: login
+        name: update
         required: true
         schema:
-          $ref: '#/definitions/model.User'
+          $ref: '#/definitions/model.Update'
       produces:
       - application/json
       responses:
         "200":
           description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+        "400":
+          description: bad request || user with that email already exists, please
+            check id or use another email
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+        "401":
+          description: unauthorized please check again your credential
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+        "404":
+          description: user with that id does not exist
           schema:
             allOf:
             - $ref: '#/definitions/helper.Response'

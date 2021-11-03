@@ -17,7 +17,7 @@ type UserService interface {
 	GetAll() ([]model.User, error)
 	Validate(post *model.User) error
 	CreateUser(registerModel model.Register) (model.User, error)
-	UpdateUser(id int, userModel *model.User) (model.User, error)
+	UpdateUser(id int, userModel *model.Update) (model.User, error)
 	DeleteUser(id int) error
 }
 
@@ -108,7 +108,7 @@ func (service *userService) CreateUser(registerModel model.Register) (model.User
 	return model.User{Id: int(userEntity.ID), Name: userEntity.Name, Email: userEntity.Email, Password: registerModel.Password}, nil
 }
 
-func (service *userService) UpdateUser(id int, userModel *model.User) (model.User, error) {
+func (service *userService) UpdateUser(id int, userModel *model.Update) (model.User, error) {
 
 	if userModel.Email == "" {
 		return model.User{}, errors.New(helper.UserEmailEmpty)
@@ -140,9 +140,11 @@ func (service *userService) UpdateUser(id int, userModel *model.User) (model.Use
 
 	errUpdate := service.userRepository.UpdateUser(userEntity)
 
-	userModel.Id = int(userEntity.ID)
+	if errUpdate != nil {
+		return model.User{}, errUpdate
+	}
 
-	return *userModel, errUpdate
+	return model.User{Id: int(userEntity.ID), Name: userEntity.Name, Email: userEntity.Email, Password: userModel.Password}, nil
 }
 
 func (service *userService) DeleteUser(id int) error {
