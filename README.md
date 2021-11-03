@@ -25,11 +25,7 @@
 ```sh
 curl --location --request PUT 'http://localhost:8080/v1/api/users' \
 --header 'Content-Type: application/json' \
---data-raw '{
-	"Name":"Arden",
-    "Email":"arden@mail.com",
-    "Password":"strongpassword123"
-}'
+--data-raw '{"Name":"Arden", "Email":"arden@mail.com", "Password":"strongpassword123"}'
 ```
 
 ##### #Login (Authorize) With Given User Credentials
@@ -39,10 +35,7 @@ curl --location --request PUT 'http://localhost:8080/v1/api/users' \
 ```sh
 curl --location --request POST 'http://localhost:8080/v1/api/auth/login' \
 --header 'Content-Type: application/json' \
---data-raw '{
-	"Email":"arden@mail.com",
-    "Password":"strongpassword123"
-}'
+--data-raw '{"Email":"arden@mail.com", "Password":"strongpassword123"}'
 ```
 
 ##### #GetUserById - (Authorization Required)
@@ -69,11 +62,7 @@ curl --location --request GET 'http://localhost:8080/v1/api/users' \
 curl --location --request PATCH 'http://localhost:8080/v1/api/users/1' \
 --header 'Authorization: AUTHTOKEN' \
 --header 'Content-Type: application/json' \
---data-raw '{
-	"Name":"ArdenNew",
-	"Email":"arden_new@mail.com",
-    "Password":"strongpassword1234"
-}'
+--data-raw '{"Name":"ArdenNew", "Email":"arden_new@mail.com", "Password":"strongpassword1234"}'
 ```
 
 ##### # DeleteUser (Set DeletedDate) With Id Of User - (Authorization Required)
