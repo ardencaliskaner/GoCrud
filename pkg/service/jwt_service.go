@@ -27,6 +27,10 @@ func NewJWTService() JWTService {
 	return &jwtService{issuer: "arden", secretKey: getSecretKey()}
 }
 
+func NewJWTServiceMock() JWTService {
+	return &jwtService{issuer: "arden", secretKey: "arden"}
+}
+
 func getSecretKey() string {
 	secretKey := os.Getenv("JWT_SECRET")
 	if secretKey != "" {
@@ -36,6 +40,11 @@ func getSecretKey() string {
 }
 
 func (j *jwtService) GenerateToken(UserID string) string {
+
+	if UserID == "" {
+		return ""
+	}
+
 	claims := &jwtCustomClaim{
 		UserID,
 		jwt.StandardClaims{
