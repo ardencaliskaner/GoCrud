@@ -5,9 +5,11 @@ import (
 	"GoCrud/pkg/db/entity"
 	"GoCrud/pkg/helper"
 	"errors"
+	"log"
 	"time"
 
 	"github.com/jinzhu/gorm"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type userRepository struct {
@@ -60,12 +62,16 @@ func (repo *userRepository) GetAll() (users []*entity.User, err error) {
 
 func (repo *userRepository) CreateUser(user *entity.User) error {
 
+	user.Password = hashAndSalt([]byte(user.Password))
+
 	result := repo.DB.Create(&user)
 
 	return result.Error
 }
 
 func (repo *userRepository) UpdateUser(updateUserEntity *entity.User) error {
+
+	updateUserEntity.Password = hashAndSalt([]byte(updateUserEntity.Password))
 
 	result := repo.DB.Save(&updateUserEntity)
 	return result.Error
@@ -77,4 +83,13 @@ func (repo *userRepository) DeleteUser(delUserEntity *entity.User) error {
 
 	result := repo.DB.Save(&delUserEntity)
 	return result.Error
+}
+
+func hashAndSalt(pwd []byte) string {
+	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
+	if err != nil {
+		log.Println(err)
+		panic("Failed to hash a password")
+	}
+	return string(hash)
 }

@@ -88,11 +88,11 @@ type Response struct {
 ## Installation & Run
 
 ##### # docker-compose
-- Setup docker environemnt use "docker-compose.yml" to docker-compose up.
+- Setup docker environment use "docker-compose.yml" to docker-compose up.
 - Go to project folder directory and execute
 ```sh
 # start docker environment
-$ docker-compose up -d (--build)
+$ docker-compose up -d --build
 
 # list running services
 $ docker-compose ps

@@ -6,9 +6,6 @@ import (
 	"GoCrud/pkg/model"
 	"GoCrud/pkg/repository"
 	"errors"
-	"log"
-
-	"golang.org/x/crypto/bcrypt"
 )
 
 type userService struct {
@@ -100,7 +97,7 @@ func (service *userService) CreateUser(registerModel model.Register) (model.User
 	userEntity := entity.User{
 		Name:     registerModel.Name,
 		Email:    registerModel.Email,
-		Password: hashAndSalt([]byte(registerModel.Password)),
+		Password: registerModel.Password,
 	}
 
 	err := service.userRepository.CreateUser(&userEntity)
@@ -108,7 +105,7 @@ func (service *userService) CreateUser(registerModel model.Register) (model.User
 		return model.User{}, err
 	}
 
-	return model.User{Id: int(userEntity.ID), Name: userEntity.Name, Email: userEntity.Email}, nil
+	return model.User{Id: int(userEntity.ID), Name: userEntity.Name, Email: userEntity.Email, Password: registerModel.Password}, nil
 }
 
 func (service *userService) UpdateUser(id int, userModel *model.User) (model.User, error) {
@@ -139,12 +136,11 @@ func (service *userService) UpdateUser(id int, userModel *model.User) (model.Use
 
 	userEntity.Name = userModel.Name
 	userEntity.Email = userModel.Email
-	userEntity.Password = hashAndSalt([]byte(userModel.Password))
+	userEntity.Password = userModel.Password
 
 	errUpdate := service.userRepository.UpdateUser(userEntity)
 
 	userModel.Id = int(userEntity.ID)
-	userModel.Password = userEntity.Password
 
 	return *userModel, errUpdate
 }
@@ -160,13 +156,4 @@ func (service *userService) DeleteUser(id int) error {
 	errUpdate := service.userRepository.DeleteUser(userEntity)
 
 	return errUpdate
-}
-
-func hashAndSalt(pwd []byte) string {
-	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
-	if err != nil {
-		log.Println(err)
-		panic("Failed to hash a password")
-	}
-	return string(hash)
 }
