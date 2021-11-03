@@ -1,4 +1,4 @@
-FROM golang:1.14.6-alpine3.12 as builder
+FROM golang:1.16.9-alpine3.14 as builder
 
 COPY go.mod go.sum /go/src/GoCrud/
 WORKDIR /go/src/GoCrud

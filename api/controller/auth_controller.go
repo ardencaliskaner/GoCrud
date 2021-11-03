@@ -28,6 +28,15 @@ func NewAuthController() AuthController {
 	}
 }
 
+// Login func for creates a new token.
+// @Description Create a new token.
+// @Summary create a new token
+// @Tags Login
+// @Accept json
+// @Produce json
+// @Param login body model.Login true "Login model"
+// @Success 200 {object} helper.Response{status=bool,message=string,errors=object,data=object}
+// @Router /v1/api/auth/login [POST]
 func (controller *authController) Login(ctx *gin.Context) {
 	var loginModel model.Login
 	errDTO := ctx.ShouldBind(&loginModel)
@@ -49,6 +58,15 @@ func (controller *authController) Login(ctx *gin.Context) {
 	ctx.JSON(response.Code, response)
 }
 
+// Register New User
+// @Description RegisterUser (Insert)
+// @Summary create a new user
+// @Tags Register (Insert)
+// @Accept json
+// @Produce json
+// @Param login body model.Register true "Register model"
+// @Success 200 {object} helper.Response{status=bool,message=string,errors=object,data=object}
+// @Router /v1/api/users [PUT]
 func (controller *authController) Register(ctx *gin.Context) {
 	var registerModel model.Register
 

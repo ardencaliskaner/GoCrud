@@ -16,6 +16,7 @@ services:
       context: .
       dockerfile: Dockerfile
     env_file: docker.env
+    restart: always
     depends_on:
       - database
     networks:

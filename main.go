@@ -6,6 +6,9 @@ import (
 	"os"
 )
 
+// @securityDefinitions.apikey bearerAuth
+// @in header
+// @name Authorization
 func main() {
 	if err := run(); err != nil {
 		fmt.Fprintf(os.Stderr, "this is the startup error: %s\n", err)

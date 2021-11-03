@@ -1,0 +1,258 @@
+definitions:
+  helper.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      errors: {}
+      message:
+        type: string
+      status:
+        type: boolean
+    type: object
+  model.Login:
+    properties:
+      Email:
+        type: string
+      Password:
+        type: string
+    required:
+    - Email
+    - Password
+    type: object
+  model.Register:
+    properties:
+      Email:
+        type: string
+      Name:
+        type: string
+      Password:
+        type: string
+    required:
+    - Email
+    - Name
+    - Password
+    type: object
+  model.User:
+    properties:
+      Email:
+        type: string
+      Id:
+        type: integer
+      Name:
+        type: string
+      Password:
+        type: string
+    required:
+    - Email
+    - Name
+    - Password
+    type: object
+info:
+  contact: {}
+paths:
+  /v1/api/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Create a new token.
+      parameters:
+      - description: Login model
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/model.Login'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+      summary: create a new token
+      tags:
+      - Login
+  /v1/api/users:
+    get:
+      consumes:
+      - application/json
+      description: List of Users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+      security:
+      - bearerAuth: []
+      summary: List of Users
+      tags:
+      - GetUsers
+    put:
+      consumes:
+      - application/json
+      description: RegisterUser (Insert)
+      parameters:
+      - description: Register model
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/model.Register'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+      summary: create a new user
+      tags:
+      - Register (Insert)
+  /v1/api/users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: DeleteUser
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+      security:
+      - bearerAuth: []
+      summary: deleteUser user with given user id
+      tags:
+      - DeleteUser
+    get:
+      consumes:
+      - application/json
+      description: Get User With Given Id
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+      security:
+      - bearerAuth: []
+      summary: Get User With Given Id
+      tags:
+      - GetUserById
+    patch:
+      consumes:
+      - application/json
+      description: UpdateUser
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User model
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+      security:
+      - bearerAuth: []
+      summary: update user with given user id
+      tags:
+      - UpdateUser
+securityDefinitions:
+  bearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

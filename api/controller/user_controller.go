@@ -28,6 +28,16 @@ func NewUserController() *userController {
 	}
 }
 
+// GetUserById  - (Authorization Required)
+// @Summary Get User With Given Id
+// @Description Get User With Given Id
+// @Tags GetUserById
+// @Accept json
+// @Produce json
+// @Param   id    path    int     true        "ID"
+// @Success 200 {object} helper.Response{status=bool,message=string,errors=object,data=object}
+// @Router /v1/api/users/{id} [get]
+// @Security bearerAuth
 func (controller *userController) GetById(ctx *gin.Context) {
 	authHeader := ctx.GetHeader("Authorization")
 	_, errToken := controller.jwtService.ValidateToken(authHeader)
@@ -58,6 +68,15 @@ func (controller *userController) GetById(ctx *gin.Context) {
 	ctx.JSON(response.Code, response)
 }
 
+// GetAllUsers  - (Authorization Required)
+// @Summary List of Users
+// @Description List of Users
+// @Tags GetUsers
+// @Accept json
+// @Produce json
+// @Success 200 {object} helper.Response{status=bool,message=string,errors=object,data=object}
+// @Router /v1/api/users [get]
+// @Security bearerAuth
 func (controller *userController) GetAll(ctx *gin.Context) {
 
 	authHeader := ctx.GetHeader("Authorization")
@@ -80,6 +99,17 @@ func (controller *userController) GetAll(ctx *gin.Context) {
 	ctx.JSON(response.Code, response)
 }
 
+// UpdateUser Credentials With Given Id Of User - (Authorization Required)
+// @Description UpdateUser
+// @Summary update user with given user id
+// @Tags UpdateUser
+// @Accept json
+// @Produce json
+// @Param   id    path    int     true        "ID"
+// @Param login body model.User true "User model"
+// @Success 200 {object} helper.Response{status=bool,message=string,errors=object,data=object}
+// @Router /v1/api/users/{id} [PATCH]
+// @Security bearerAuth
 func (controller *userController) UpdateUser(ctx *gin.Context) {
 
 	authHeader := ctx.GetHeader("Authorization")
@@ -113,6 +143,16 @@ func (controller *userController) UpdateUser(ctx *gin.Context) {
 	ctx.JSON(response.Code, response)
 }
 
+// DeleteUser With Given Id Of User - (Authorization Required)
+// @Description DeleteUser
+// @Summary deleteUser user with given user id
+// @Tags DeleteUser
+// @Accept json
+// @Produce json
+// @Param   id    path    int     true        "ID"
+// @Success 200 {object} helper.Response{status=bool,message=string,errors=object,data=object}
+// @Router /v1/api/users/{id} [DELETE]
+// @Security bearerAuth
 func (controller *userController) DeleteUser(ctx *gin.Context) {
 
 	authHeader := ctx.GetHeader("Authorization")
