@@ -34,8 +34,8 @@ func (s *Server) Routes() *gin.Engine {
 			user.Use(jwtMiddleware.AuthorizeJWT())
 			user.PATCH("/:id", s.userController.UpdateUser)
 			user.DELETE("/:id", s.userController.DeleteUser)
-			user.GET("/:id", s.userController.GetById)
 			user.GET("/", s.userController.GetAll)
+			user.GET("/:id", s.userController.GetById)
 		}
 	}
 
