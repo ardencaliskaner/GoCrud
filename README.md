@@ -38,6 +38,9 @@ $ docker-compose rm
 ##### # Run Locally
 
 - Download posgresql from https://www.postgresql.org/download/ and Setup
+- On macos download from https://postgresapp.com 
+
+- If download the server find pg_hba.conf file and change IPv4 and IPv6 connections trust (not scram-sha-256 or md5)
 - Setup postgresql connection variables with local.env file or just setup yours and change parameters inside local.env
 ```sh
 POSTGRES_HOST=localhost

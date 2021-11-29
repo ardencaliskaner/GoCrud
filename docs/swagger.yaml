@@ -129,63 +129,6 @@ paths:
       tags:
       - Login
   /v1/api/users:
-    get:
-      consumes:
-      - application/json
-      description: List of Users
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/helper.Response'
-            - properties:
-                data:
-                  type: object
-                errors:
-                  type: object
-                message:
-                  type: string
-                status:
-                  type: boolean
-              type: object
-        "401":
-          description: unauthorized please check again your credential
-          schema:
-            allOf:
-            - $ref: '#/definitions/helper.Response'
-            - properties:
-                data:
-                  type: object
-                errors:
-                  type: object
-                message:
-                  type: string
-                status:
-                  type: boolean
-              type: object
-        "404":
-          description: user with that id does not exist
-          schema:
-            allOf:
-            - $ref: '#/definitions/helper.Response'
-            - properties:
-                data:
-                  type: object
-                errors:
-                  type: object
-                message:
-                  type: string
-                status:
-                  type: boolean
-              type: object
-      security:
-      - bearerAuth: []
-      summary: List of Users
-      tags:
-      - GetUsers
     put:
       consumes:
       - application/json
@@ -280,6 +223,64 @@ paths:
       summary: create a new user
       tags:
       - Register (Insert)
+  /v1/api/users/:
+    get:
+      consumes:
+      - application/json
+      description: Get All Users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+        "401":
+          description: unauthorized please check again your credential
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+        "404":
+          description: user with that id does not exist
+          schema:
+            allOf:
+            - $ref: '#/definitions/helper.Response'
+            - properties:
+                data:
+                  type: object
+                errors:
+                  type: object
+                message:
+                  type: string
+                status:
+                  type: boolean
+              type: object
+      security:
+      - bearerAuth: []
+      summary: Get All Users
+      tags:
+      - GetUsers
   /v1/api/users/{id}:
     delete:
       consumes:

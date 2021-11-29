@@ -71,16 +71,16 @@ func (controller *userController) GetById(ctx *gin.Context) {
 	ctx.JSON(response.Code, response)
 }
 
-// GetAllUsers  - (Authorization Required)
-// @Summary List of Users
-// @Description List of Users
+// GetUsers  - (Authorization Required)
+// @Summary Get All Users
+// @Description Get All Users
 // @Tags GetUsers
 // @Accept json
 // @Produce json
 // @Success 200 {object} helper.Response{status=bool,message=string,errors=object,data=object}
 // @Failure 401 {object} helper.Response{status=bool,message=string,errors=object,data=object} "unauthorized please check again your credential"
 // @Failure 404 {object} helper.Response{status=bool,message=string,errors=object,data=object} "user with that id does not exist"
-// @Router /v1/api/users [get]
+// @Router /v1/api/users/ [get]
 // @Security bearerAuth
 func (controller *userController) GetAll(ctx *gin.Context) {
 
